@@ -16,6 +16,13 @@ FINAL_COLUMNS = [
 
 def convert_to_dataframe(all_data):
     df = pd.DataFrame(all_data)
-    df = df.iloc[:, :len(FINAL_COLUMNS)]  # trim extra columns
+
+    # Adjust column size safely
+    if df.shape[1] < len(FINAL_COLUMNS):
+        for i in range(len(FINAL_COLUMNS) - df.shape[1]):
+            df[df.shape[1]] = ""
+
+    df = df.iloc[:, :len(FINAL_COLUMNS)]
     df.columns = FINAL_COLUMNS
+
     return df
